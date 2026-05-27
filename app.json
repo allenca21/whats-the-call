@@ -2,7 +2,7 @@
   "expo": {
     "name": "What's the Call?",
     "slug": "whats-the-call",
-    "version": "1.1.0",
+    "version": "2.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/whatsthecall.png",
     "scheme": "whatsthecall",
@@ -24,17 +24,17 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.allenca21.whatsthecall",
-      "versionCode": 8
+      "versionCode": 15
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/whatsthecall.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
