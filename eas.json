@@ -12,13 +12,16 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true,
       "cache": {
         "disabled": true
       }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "releaseStatus": "draft"
+      }
+    }
   }
 }

@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import QUESTION_BANK from './questionBank';
 import REFERENCE_LIBRARY from './referenceLibrary';
 
-const CHAPTERS = ['All', 1, 2, 3, 4, 5, 6, 7, 8, 9, 'RVI', 'ADV', 'Tournament'];
+const CHAPTERS = ['All', 1, 2, 3, 4, 5, 6, 7, 8, 9, 'RVI', 'ADV', 'Tournament', 'Rule Interpretations'];
 const QUIZ_SIZES = [5, 10, 15, 20, 25, 30];
 const MODES = [
   { key: 'mixed', label: 'Mixed' },
@@ -65,6 +65,7 @@ function getChapterLabel(chapter) {
   if (chapter === 'RVI') return 'Reg VI';
   if (chapter === 'ADV') return 'Advanced';
   if (chapter === 'Tournament') return 'Tournament';
+  if (chapter === 'Rule Interpretations') return 'Rule Interp';
   return `Ch ${chapter}`;
 }
 
@@ -86,6 +87,8 @@ function initProgress() {
     9: { correct: 0, attempted: 0 },
     RVI: { correct: 0, attempted: 0 },
     ADV: { correct: 0, attempted: 0 },
+    Tournament: { correct: 0, attempted: 0 },
+    'Rule Interpretations': { correct: 0, attempted: 0 },
   };
 }
 
@@ -679,7 +682,7 @@ function AppInner() {
           >
             <Text style={styles.gameModeButtonIcon}>⚡</Text>
             <View style={styles.gameModeButtonInner}>
-              <Text style={styles.gameModeButtonTitle}>Game Mode</Text>
+              <Text style={styles.gameModeButtonTitle}>Live Call</Text>
               <Text style={styles.gameModeButtonSub}>Instant rulings -- tap, tap, done</Text>
             </View>
             <Text style={styles.gameModeButtonBadge}>{isPro ? 'PRO' : 'Try Free'}</Text>
@@ -976,10 +979,10 @@ function AppInner() {
     return (
       <SafeAreaView style={styles.safe}>
         <ScrollView contentContainerStyle={styles.container}>
-          <TopBar title="Game Mode" onHome={goHome} />
+          <TopBar title="Live Call" onHome={goHome} />
           <View style={styles.paywallHero}>
             <Text style={styles.paywallEmoji}>⚡</Text>
-            <Text style={styles.paywallTitle}>Game Mode</Text>
+            <Text style={styles.paywallTitle}>Live Call</Text>
             <Text style={styles.paywallSubtitle}>Make the right call in seconds</Text>
           </View>
           <View style={styles.paywallFeatures}>
@@ -1017,7 +1020,7 @@ function AppInner() {
             disabled={purchasePending}
           >
             <Text style={styles.paywallBuyButtonText}>
-              {purchasePending ? 'Processing...' : 'Unlock Game Mode -- $2.99'}
+              {purchasePending ? 'Processing...' : 'Unlock Live Call -- $2.99'}
             </Text>
           </TouchableOpacity>
 
@@ -1040,7 +1043,7 @@ function AppInner() {
       return (
         <SafeAreaView style={styles.safe}>
           <ScrollView contentContainerStyle={styles.container}>
-            <TopBar title="Game Mode ⚡" onHome={goHome} />
+            <TopBar title="Live Call ⚡" onHome={goHome} />
             <View style={styles.gmHero}>
               <Text style={styles.gmHeroText}>What just happened?</Text>
               <Text style={styles.gmHeroSub}>Pick a category for an instant ruling</Text>
@@ -1094,7 +1097,7 @@ function AppInner() {
       return (
         <SafeAreaView style={styles.safe}>
           <ScrollView contentContainerStyle={styles.container}>
-            <TopBar title="Game Mode ⚡" onHome={goHome} />
+            <TopBar title="Live Call ⚡" onHome={goHome} />
             <View style={styles.gmResultCard}>
               <Text style={styles.gmResultLabel}>THE RULING</Text>
               <Text style={styles.gmResultRuling}>{result.ruling}</Text>
@@ -1117,7 +1120,7 @@ function AppInner() {
     return (
       <SafeAreaView style={styles.safe}>
         <ScrollView contentContainerStyle={styles.container}>
-          <TopBar title="Game Mode ⚡" onHome={goHome} />
+          <TopBar title="Live Call ⚡" onHome={goHome} />
           <View style={styles.gmQuestionCard}>
             <Text style={styles.gmStepLabel}>{GAME_MODE_CATEGORIES.find(c => c.key === gameModeCategory)?.label}</Text>
             <Text style={styles.gmQuestion}>{node.question}</Text>
@@ -1162,6 +1165,7 @@ const GAME_MODE_CATEGORIES = [
   { key: 'obstruction', label: 'Obstruction', emoji: '🛑' },
   { key: 'batting', label: 'Batting', emoji: '🏏' },
   { key: 'scoring', label: 'Scoring', emoji: '🏠' },
+  { key: 'interpretations', label: 'Interpretations', emoji: '📖' },
   { key: 'common', label: 'Common Calls', emoji: '⚡' },
 ];
 
@@ -1376,6 +1380,9 @@ const GAME_MODE_TREES = {
       { label: 'Offensive team members crowded around a base to confuse fielders', options: [], result: { ruling: 'Runner is declared OUT for teammate interference', rule: 'Rule 7.09(d)', detail: 'Any member or members of the offensive team who stand or gather around any base to which a runner is advancing, to confuse or hinder fielders, shall cause that runner to be declared out.' } },
       { label: 'Catcher interfered with the batter -- but batter reached base safely', options: [], result: { ruling: 'Offense may ACCEPT the play OR take the interference penalty', rule: 'Rule 6.08(c)', detail: 'If the catcher interferes with the batter but the batter reaches first base on a hit, error, or otherwise, and all runners advance at least one base, the play proceeds without reference to the interference. The manager may elect to accept the play instead.' } },
       { label: 'Batter intentionally deflected a foul ball while running to first', options: [], result: { ruling: 'Batter-runner is OUT -- ball is dead', rule: 'Rule 6.05(h)', detail: 'After hitting or bunting a foul ball, the batter-runner is out if they intentionally deflect the course of the ball in any manner while running to first base. The ball is dead and no runners may advance.' } },
+      { label: 'Ball deflected off a fielder, then unintentionally hits a runner', options: [], result: { ruling: 'LIVE BALL -- play continues; runner cannot reasonably avoid a deflected ball', rule: '2026 Umpire Manual 21B', detail: 'Once a batted ball is touched or deflected by ANY infielder (including the pitcher), if it then unintentionally hits a runner, the ball remains alive and in play. The runner cannot reasonably be expected to avoid a deflected ball. Intentional interference can still be called if the runner deliberately deflects it.' } },
+      { label: 'Batter hindered catcher\'s throw, but catcher\'s throw still retired the runner', options: [], result: { ruling: 'IGNORE the interference -- runner is OUT, ball stays live, others may advance', rule: '2026 Umpire Manual 21I', detail: 'If the catcher\'s throw directly retires the runner DESPITE the batter\'s interference, the interference is disregarded. Play stands as if no violation occurred. Runner is out, ball remains live, and other runners may advance at their own risk.' } },
+      { label: 'Batter-runner outside the running lane, struck by quality throw to first', options: [], result: { ruling: 'OUT for interference -- but only if BOTH conditions met: a throw was made AND it was a quality throw', rule: '2026 Umpire Manual 21H', detail: 'Running lane interference requires both: (1) a throw was made, and (2) it was a quality throw -- one the fielder could reasonably have caught had the runner not been in the way. The batter-runner may legally exit the lane only in the immediate vicinity of first base.' } },
     ],
   },
 
@@ -1549,6 +1556,77 @@ const GAME_MODE_TREES = {
           { label: 'Pitch was in the strike zone', result: { ruling: 'NO -- it is a STRIKE', rule: 'Rule 6.08(b)', detail: 'If the pitch is in the strike zone when it touches the batter, it is called a strike. The batter is not awarded first base.' } },
           { label: 'Batter swung at the pitch', result: { ruling: 'NO -- it is a STRIKE', rule: 'Rule 6.08(b)', detail: 'If the batter swings at a pitch and is hit by it, the pitch counts as a strike and the batter is not awarded first base.' } },
           { label: 'Batter made no attempt to avoid the pitch', result: { ruling: 'NO award -- batter must attempt to avoid the pitch', rule: 'Rule 6.08(b)', detail: 'If the batter makes no attempt to avoid being touched by the pitch, the batter is not awarded first base. The ball is dead and it is called a ball if outside the zone.' } },
+        ],
+      }},
+      { label: 'Foul tip vs rebound -- caught by catcher, what is it?', next: {
+        question: 'Where did the ball first contact the catcher?',
+        options: [
+          { label: 'Directly to the catcher\'s hand or mitt/glove and caught', result: { ruling: 'FOUL TIP -- strike (out if strike 3), ball LIVE, runners may advance', rule: '2026 Umpire Manual 15A', detail: 'A foul tip is a batted ball that directly contacts the catcher\'s hand or mitt/glove AND is caught. The ball is live and in play. Runners may advance and may also be thrown out.' } },
+          { label: 'Hit another part of catcher\'s body or equipment first, then caught', result: { ruling: 'REBOUND -- this is a FOUL BALL (not a foul tip)', rule: '2026 Umpire Manual 15B', detail: 'A rebound is a sharply batted ball that first strikes any part of the catcher OTHER than the hand or mitt/glove, then is controlled. A rebound is a foul ball, not a foul tip. Ball is dead.' } },
+        ],
+      }},
+      { label: 'Spectators are heckling badly -- can game be forfeited?', options: [], result: { ruling: 'NO -- a game can NEVER be forfeited over spectator actions', rule: '2026 Umpire Manual #34; Rule 9.01(g)', detail: 'Managers are not responsible for spectators. The umpire may suspend play until corrected, but cannot forfeit or threaten to forfeit over spectator behavior. Responsibility falls to the league\'s Board of Directors.' } },
+      { label: 'Is there a minimum height for a caught fly ball?', options: [], result: { ruling: 'NO -- if it\'s not a foul tip or rebound, it can be caught at ANY height', rule: '2026 Umpire Manual 15B', detail: 'There is no requirement that the ball travel above the batter\'s head. As long as it is not a foul tip (off hand/glove only) or a rebound (off another body part), it can be legally caught for an out at any height.' } },
+    ],
+  },
+
+  interpretations: {
+    question: 'Which interpretation do you need?',
+    options: [
+      { label: 'Batting out of turn -- timing of the appeal', next: {
+        question: 'When did the appeal happen?',
+        options: [
+          { label: 'During the improper batter\'s at-bat (before it\'s complete)', result: { ruling: 'PROPER batter steps in and assumes the existing count; all runner advances are LEGAL', rule: '2026 Umpire Manual 6B; Rule 6.07', detail: 'The proper batter is placed in the box and assumes the count already established. All advances by base runners to that point remain legal. Either offense or defense may appeal in this window.' } },
+          { label: 'After the at-bat ended, but BEFORE the next pitch or play', result: { ruling: 'PROPER batter is OUT, advances by runners from improper batter are NULLIFIED', rule: '2026 Umpire Manual 6B; Rule 6.07', detail: 'The proper batter (who should have batted) is called out. Advances by runners due to the improper batter\'s actions are nullified. The next batter is the one whose name follows the called-out proper batter. Only the defense may appeal in this window.' } },
+          { label: 'After the NEXT pitch or play occurred', result: { ruling: 'TOO LATE -- improper batter\'s actions are LEGAL, all advances stand', rule: '2026 Umpire Manual 6B; Rule 6.07', detail: 'Once a pitch or play occurs, the improper batter\'s actions are legalized. The batting order continues with the batter following the now-legalized proper batter.' } },
+        ],
+      }},
+      { label: 'Catch & carry -- fielder enters dead ball area', next: {
+        question: 'What were the fielder\'s feet doing at the time of the catch?',
+        options: [
+          { label: 'At least one foot on the playing surface (or the lip of the dugout)', result: { ruling: 'LEGAL CATCH -- batter is out, ball dead, each runner awarded ONE base from time of pitch', rule: '2026 Umpire Manual 8A, 8C; Rules 5.10(f), 7.04(b)', detail: 'A legal catch requires one or both feet on or over the playing surface (including the lip). The catch is good even if momentum carries the fielder into a dead ball area. Ball becomes dead and each runner is awarded one base from time of pitch.' } },
+          { label: 'One foot on lip, other foot on a dugout step', result: { ruling: 'INVALID CATCH -- step counts as "inside the dugout"; ball is foul (or live if fair)', rule: '2026 Umpire Manual 8D', detail: 'A foot on a dugout step means the fielder is inside the dugout. The catch is invalid. If the ball was a foul fly, it\'s just a foul ball. If fair, the ball remains live and is treated as if not caught.' } },
+          { label: 'Fielder dove into the dugout with neither foot on/above playing surface', result: { ruling: 'INVALID CATCH -- fielder considered inside the dugout', rule: '2026 Umpire Manual 8D', detail: 'A fielder is inside the dugout when neither foot is on or above the playing surface. The catch does not count.' } },
+        ],
+      }},
+      { label: 'Runner missed home plate', next: {
+        question: 'What did the runner do after missing the plate?',
+        options: [
+          { label: 'Continued toward the dugout without attempting to return', result: { ruling: 'May be put out on APPEAL -- a fielder touches home and requests the umpire\'s decision', rule: '2026 Umpire Manual 33A; Rule 7.08(k)', detail: 'When the runner continues toward the bench, the defense puts them out by appeal. This is the "catcher would otherwise need to chase the runner" scenario.' } },
+          { label: 'Immediately tried to return to home plate', result: { ruling: 'Must be TAGGED to be put out -- must stay within 3 feet of the basepath', rule: '2026 Umpire Manual 33B; Rule 7.08(k)', detail: 'If the runner immediately attempts to return, the runner must be tagged. The runner must remain within three feet of the basepath between themselves and home plate.' } },
+          { label: 'Runner missed plate, catcher missed tag (no touch, no tag)', result: { ruling: 'Umpire makes NO immediate signal -- runner must be tagged on return, or appealed if going to bench', rule: '2026 Umpire Manual 33C; Rule 7.08(k)', detail: 'On a "no touch / no tag" play, no immediate signal is made. If runner returns, must be tagged. If runner continues to bench, defense may appeal. Once in the dugout, runner can no longer return (unless ball is dead, fewer than 3 outs, no following runner has scored).' } },
+          { label: 'Two runners arrive together; first missed plate, second touched legally', result: { ruling: 'First runner may NOT retouch -- may be put out on appeal; if 3rd out, NEITHER run counts', rule: '2026 Umpire Manual 33E; Rule 4.09', detail: 'The first runner cannot retouch home plate and may be put out on appeal. If this appeal is the third out, neither run counts (the appeal-out is treated as a time-of-event out).' } },
+        ],
+      }},
+      { label: 'Walk-off winning run from a walk/HBP/catcher\'s interference', next: {
+        question: 'Did the required runners touch their next base?',
+        options: [
+          { label: 'Runner from 3rd touched home AND batter-runner touched 1st', result: { ruling: 'RUN COUNTS -- game over', rule: '2026 Umpire Manual 33F; Rule 7.09(d)', detail: 'On a forced winning run from an award (BB, HBP, catcher\'s interference), only the runner from 3rd and the batter-runner are required to touch their next base. If both did, the run counts and the game ends.' } },
+          { label: 'Runner from 3rd touched home, but batter-runner did NOT touch 1st', result: { ruling: 'RUN does NOT count -- batter-runner must touch first base', rule: '2026 Umpire Manual 33F; Rule 7.09(d)', detail: 'On a forced winning run from an award, both the runner from 3rd AND the batter-runner must touch their next base. If the batter-runner fails to advance to first, the run does not count and the game is not over.' } },
+          { label: 'Other forced runners (1st, 2nd) didn\'t touch their next base', result: { ruling: 'RUN STILL COUNTS -- only 3rd-base runner and batter-runner are required', rule: '2026 Umpire Manual 33F; Rule 7.09(d)', detail: 'On an award-forced winning run, other forced runners are NOT required to touch their next base for the game to end. The celebration may begin once the runner from 3rd touches home and the batter-runner touches first.' } },
+        ],
+      }},
+      { label: 'Forced runner thrown out for 3rd out -- does the run still count?', next: {
+        question: 'What kind of out was the third out?',
+        options: [
+          { label: 'A FORCE out (e.g., tagged the base ahead of the forced runner)', result: { ruling: 'RUN does NOT count -- no run scores on a third-out force', rule: 'Rule 4.09(a)', detail: 'When the third out is a force out, no run scores regardless of when the runner crossed home plate.' } },
+          { label: 'A TAG out on a forced runner (e.g., tagged trying to advance after touching the base)', result: { ruling: 'RUN SCORES -- if all runners were forced and preceding runners touched their forced bases', rule: '2026 Umpire Manual 32B; Rule 4.09', detail: 'Example: bases loaded, walk, runner from 2nd overruns 3rd and is TAGGED out trying to advance. The runner from 3rd only had to touch home, which they did. The run scores even though the third out was recorded -- the tag-out was not a force.' } },
+          { label: 'A TAG out on the BATTER-RUNNER (e.g., before reaching 1st)', result: { ruling: 'RUN does NOT count -- batter-runner being out at 1st is a force; nothing else matters', rule: 'Rule 4.09(a)', detail: 'If the batter-runner fails to reach first base safely, no run can score on that play, regardless of how many runners crossed home plate.' } },
+        ],
+      }},
+      { label: 'Catcher and batter-runner collided -- catcher fielding batted ball', next: {
+        question: 'What was the nature of the contact?',
+        options: [
+          { label: 'Incidental contact during normal play', result: { ruling: 'NO VIOLATION -- signal "safe" / "that\'s nothing"', rule: '2026 Umpire Manual 36A; Rule 6.06(c)', detail: 'In most instances, contact between the catcher and batter-runner while the catcher is fielding a batted ball is considered incidental and part of normal play. Umpires signal "safe" to indicate "that\'s nothing."' } },
+          { label: 'Catcher clearly hindered by batter\'s actions', result: { ruling: 'INTERFERENCE -- batter is OUT, ball dead, runners return', rule: 'Rule 6.06(c)', detail: 'If the batter clearly hinders the catcher\'s ability to field the batted ball through their actions, the batter is called out. Ball is dead and runners return to their bases at time of pitch.' } },
+        ],
+      }},
+      { label: 'Illegal bat discovered -- what are the defense\'s options?', next: {
+        question: 'When was the illegal bat discovered?',
+        options: [
+          { label: 'During the at-bat (before complete)', result: { ruling: 'BATTER OUT, bat removed, manager+player EJECTED, lose one adult base coach -- mandatory', rule: '2026 Umpire Manual 5D; Rule 6.06(d)', detail: 'Discovered during at-bat: batter is out, bat removed, manager and player ejected, offense loses one eligible adult base coach for the duration of the game. No defensive option.' } },
+          { label: 'After at-bat but BEFORE next batter enters the box', result: { ruling: 'DEFENSIVE MANAGER\'S OPTION -- take the penalty (out + nullify play) OR take the result of the play', rule: '2026 Umpire Manual 5D; Rule 6.06(d)', detail: 'Like a football penalty, the defensive manager chooses. Penalty: batter out, runners return to time-of-pitch bases, play nullified. Result of play: action stands. EITHER WAY: bat removed, manager+player ejected, lose one adult base coach.' } },
+          { label: 'After the next batter has already entered the box', result: { ruling: 'TOO LATE -- penalty cannot be enforced; play stands', rule: 'Rule 6.06(d)', detail: 'Once the next batter enters the box, the violation can no longer be penalized. The previous at-bat\'s result stands.' } },
         ],
       }},
     ],
