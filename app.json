@@ -2,7 +2,7 @@
   "expo": {
     "name": "What's the Call?",
     "slug": "whats-the-call",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/whatsthecall.png",
     "scheme": "whatsthecall",
