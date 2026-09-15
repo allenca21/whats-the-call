@@ -1,50 +1,88 @@
-# Welcome to your Expo app 👋
+# What's the Call? Baseball
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A rules training app for Little League baseball umpires, coaches, and parents.
 
-## Get started
+**[Download on the App Store](https://apps.apple.com/us/app/whats-the-call/id6761323772)** · [Google Play](https://play.google.com/store/apps/details?id=com.allenca21.whatsthecall)
 
-1. Install dependencies
+Current version: 3.0.1
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+## What it does
 
-   ```bash
-   npx expo start
-   ```
+Most baseball rules resources are reference documents. You look something up
+after the play is over. That is not how officiating works — the call happens in
+about two seconds, under pressure, with a parent yelling from the third base
+line.
 
-In the output, you'll find options to open the app in a
+What's the Call? drills the decision instead of the citation. Each question puts
+you in a real situation, you make the call, and then you get the rule that
+governs it. The goal is recall speed, not reading comprehension.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Three modes:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **Quiz** — situational questions organized by rulebook chapter
+- **Live Call** — rapid-fire scenarios that mirror in-game decision pressure
+- **Rule Library** — the reference layer, for when you want to read the rule
+  rather than be tested on it
 
-## Get a fresh project
+## Why I built it
 
-When you're ready, run:
+I umpire Little League baseball. The gap I kept running into was
+that new umpires study the rulebook, pass the test, and then freeze on the field
+the first time they get a genuine oddity — an infield fly with a runner
+interfering, a catch-and-carry near the dugout, an appeal play nobody at the
+plate meeting anticipated.
 
-```bash
-npm run reset-project
+The question bank is written from that experience rather than paraphrased from
+the rulebook. Scenarios reflect situations that actually come up and actually
+get called wrong.
+
+Rules content is validated against the current Little League rulebook and
+umpire's manual. It is a study aid, not an official publication, and it is not
+affiliated with or endorsed by Little League International.
+
+## Built with
+
+- **React Native / Expo** — single codebase, iOS and Android
+- **EAS Build & Submit** — build pipeline and store delivery
+- **RevenueCat** — in-app purchases and entitlement management, with
+  platform-aware configuration so one `pro` entitlement covers both stores
+- **AsyncStorage** — local progress tracking, no account required
+
+The app collects no personal data and requires no sign-in. Progress lives on the
+device.
+
+## Project structure
+
+```
+App.js                 Screens, navigation, and app state
+questionBank.js        Situational questions, organized by chapter
+referenceLibrary.js    Rule reference content
+app.json               Expo configuration
+eas.json               Build and submit profiles
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+It is a deliberately flat project. The app is content-heavy and logic-light, so
+the complexity lives in the question bank rather than in the architecture.
 
-## Learn more
+## The rest of the suite
 
-To learn more about developing your project with Expo, look at the following resources:
+Same engine, different rule sets:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- [What's the Call? Fast Pitch](https://apps.apple.com/us/app/whats-the-call-fast-pitch/id6762152590) — USA Softball rules
+- [What's the Call? Flag Football](https://apps.apple.com/us/app/whats-the-call-flag-football/id6761696510)
 
-## Join the community
+## Status
 
-Join our community of developers creating universal apps.
+Live on the App Store and Google Play. Actively maintained.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Source is published for portfolio purposes.
+
+---
+
+© 2026 Clark Allen. All rights reserved.
+
+This source is made publicly viewable to demonstrate my work. It is not licensed
+for reuse, redistribution, or derivative works. Rules content and question banks
+are original writing and are not to be copied.
